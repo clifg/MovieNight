@@ -272,23 +272,30 @@ func (cl *Client) replaceColorizedName(chatData common.ChatData) common.ChatData
 	words := strings.Split(data.Message, " ")
 	newWords := []string{}
 
-	nameSet := make(map[string]bool) // use map as a set
-	nameSet[strings.ToLower(cl.name)] = true
-	nameSet[strings.ToLower("@"+cl.name)] = true
+	nameMap := make(map[string]string) // Mapping of matching names to colors
+	nameMap[strings.ToLower(cl.name)] = cl.color
+	nameMap[strings.ToLower("@"+cl.name)] = cl.color
 	if chat != nil {
-		names := chat.GetNames() // locks
-		for _, name := range names {
-			nameSet[strings.ToLower(name)] = true
-			nameSet[strings.ToLower("@"+name)] = true
+		colors := chat.GetColors() // locks
+		for name, color := range colors {
+			if strings.ToLower(name) != strings.ToLower(cl.name) {
+				nameMap[strings.ToLower(name)] = color
+				nameMap[strings.ToLower("@"+name)] = color
+			}
 		}
 	}
 	for _, word := range words {
-		if _, ok := nameSet[strings.ToLower(word)]; ok {
+		if color, ok := nameMap[strings.ToLower(word)]; ok {
 			// mention is for the current user
 			if strings.ToLower(word) == strings.ToLower(cl.name) || strings.ToLower(word) == strings.ToLower("@"+cl.name) {
-				newWords = append(newWords, `<span class="mention">`+word+`</span>`)
+				newWords = append(newWords, `<span class="mention" style="background:`+ cl.color +`">`+word+`</span>`)
 			} else { // mention is for another user
-				newWords = append(newWords, `<span class="othermention">`+word+`</span>`)
+				// If we have a color map, use that, otherwise the default highlight will be used
+				backgroundOverride := ""
+				if color != "" {
+					backgroundOverride = ` style="background:` + color + `"`
+				}
+				newWords = append(newWords, `<span class="othermention"`+backgroundOverride+`>`+word+`</span>`)
 			}
 		} else {
 			newWords = append(newWords, word)
