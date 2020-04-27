@@ -362,6 +362,18 @@ func (cr *ChatRoom) GetNames() []string {
 	return names
 }
 
+func (cr *ChatRoom) GetColors() map[string]string {
+	colors := make(map[string]string)
+	defer cr.clientsMtx.Unlock()
+	cr.clientsMtx.Lock()
+
+	for _, val := range cr.clients {
+		colors[val.name] = val.color
+	}
+
+	return colors
+}
+
 func (cr *ChatRoom) delClient(sliceId int) {
 	cr.clients = append(cr.clients[:sliceId], cr.clients[sliceId+1:]...)
 }
