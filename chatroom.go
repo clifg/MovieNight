@@ -325,7 +325,7 @@ func (cr *ChatRoom) Broadcast() {
 			cr.clientsMtx.Lock()
 			for _, client := range cr.clients {
 				if client.CmdLevel >= common.CmdlMod {
-					send(msg, client)
+					go send(msg, client)
 				}
 			}
 			cr.clientsMtx.Unlock()
