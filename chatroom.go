@@ -266,7 +266,7 @@ func (cr *ChatRoom) Unmod(name string) error {
 	}
 
 	client.Unmod()
-	client.SendServerMessage(`You have been unmodded.`)
+	go client.SendServerMessage(`You have been unmodded.`)
 	return nil
 }
 
@@ -281,7 +281,7 @@ func (cr *ChatRoom) Mod(name string) error {
 
 	if client.CmdLevel < common.CmdlMod {
 		client.CmdLevel = common.CmdlMod
-		client.SendServerMessage(`You have been modded.`)
+		go client.SendServerMessage(`You have been modded.`)
 	}
 	return nil
 }
