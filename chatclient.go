@@ -288,7 +288,7 @@ func (cl *Client) replaceColorizedName(chatData common.ChatData) common.ChatData
 		if color, ok := nameMap[strings.ToLower(word)]; ok {
 			// mention is for the current user
 			if strings.ToLower(word) == strings.ToLower(cl.name) || strings.ToLower(word) == strings.ToLower("@"+cl.name) {
-				newWords = append(newWords, `<span class="mention" style="background:`+ cl.color +`">`+word+`</span>`)
+				newWords = append(newWords, `<span class="mention" style="background:`+ color +`">`+word+`</span>`)
 			} else { // mention is for another user
 				// If we have a color map, use that, otherwise the default highlight will be used
 				backgroundOverride := ""
