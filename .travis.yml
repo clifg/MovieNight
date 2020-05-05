@@ -11,5 +11,5 @@ env:
 
 after_success:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t travis-ci-movienight .
+    - docker build -t $DOCKER_USERNAME/movienight:$TRAVIS_COMMIT .
     - docker images
