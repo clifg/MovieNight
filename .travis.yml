@@ -8,3 +8,11 @@ go:
 
 env:
     - GO111MODULE=on
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t travis-ci-movienight .
+      - docker images
