@@ -15,3 +15,7 @@ after_success:
     - docker build -t $DOCKER_USERNAME/movienight:$TRAVIS_TAG .
     - docker images
     - docker push $DOCKER_USERNAME/movienight:$TRAVIS_TAG
+    - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+        docker tag $DOCKER_USERNAME/movienight:$TRAVIS_TAG $DOCKER_USERNAME/movienight:latest
+        docker push $DOCKER_USERNAME/movienight:latest
+      fi
