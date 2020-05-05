@@ -34,14 +34,15 @@ func TestClient_emoteHighlight(t *testing.T) {
 	}
 
 	data := [][]string{
-		{"zorchenhimer", `<span class="mention" style="background:` + client.color + `">zorchenhimer</span>`},
+		{"zorchenhimer", `zorchenhimer`},
 		{"@zorchenhimer", `<span class="mention" style="background:` + client.color + `">@zorchenhimer</span>`},
-		{"Zorchenhimer", `<span class="mention" style="background:` + client.color + `">Zorchenhimer</span>`},
+		{"Zorchenhimer", `Zorchenhimer`},
 		{"@Zorchenhimer", `<span class="mention" style="background:` + client.color + `">@Zorchenhimer</span>`},
-		{"hello zorchenhimer", `hello <span class="mention" style="background:` + client.color + `">zorchenhimer</span>`},
-		{"hello zorchenhimer ass", `hello <span class="mention" style="background:` + client.color + `">zorchenhimer</span> ass`},
+		{"hello zorchenhimer", `hello zorchenhimer`},
+		{"hello zorchenhimer ass", `hello zorchenhimer ass`},
+		{"hello @zorchenhimer ass", `hello <span class="mention" style="background:` + client.color + `">@zorchenhimer</span> ass`},
 		{`<img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="40px" title="zorcheWhat">`, `<img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="40px" title="zorcheWhat">`},
-		{`zorchenhimer <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="40px" title="zorcheWhat">`, `<span class="mention" style="background:` + client.color + `">zorchenhimer</span> <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="40px" title="zorcheWhat">`},
+		{`zorchenhimer <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="40px" title="zorcheWhat">`, `zorchenhimer <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="40px" title="zorcheWhat">`},
 	}
 
 	for _, d := range data {
@@ -69,16 +70,16 @@ func TestClient_emoteHighlight(t *testing.T) {
 	chat.clients = append(chat.clients, client2)
 
 	data = [][]string{
-		{"zorchenhimer", `<span class="othermention" style="background:` + client.color + `">zorchenhimer</span>`},
+		{"zorchenhimer", `zorchenhimer`},
 		{"@zorchenhimer", `<span class="othermention" style="background:` + client.color + `">@zorchenhimer</span>`},
-		{"Zorchenhimer", `<span class="othermention" style="background:` + client.color + `">Zorchenhimer</span>`},
+		{"Zorchenhimer", `Zorchenhimer`},
 		{"@Zorchenhimer", `<span class="othermention" style="background:` + client.color + `">@Zorchenhimer</span>`},
-		{"hello zorchenhimer", `hello <span class="othermention" style="background:` + client.color + `">zorchenhimer</span>`},
-		{"hello zorchenhimer ass", `hello <span class="othermention" style="background:` + client.color + `">zorchenhimer</span> ass`},
-		{"irani", `<span class="mention" style="background:` + client2.color + `">irani</span>`},
+		{"hello zorchenhimer", `hello zorchenhimer`},
+		{"hello zorchenhimer ass", `hello zorchenhimer ass`},
+		{"hello @zorchenhimer ass", `hello <span class="othermention" style="background:` + client.color + `">@zorchenhimer</span> ass`},
 		{"@irani", `<span class="mention" style="background:` + client2.color + `">@irani</span>`},
 		{`<img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="28px" title="zorcheWhat">`, `<img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="28px" title="zorcheWhat">`},
-		{`zorchenhimer <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="28px" title="zorcheWhat">`, `<span class="othermention" style="background:` + client.color + `">zorchenhimer</span> <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="28px" title="zorcheWhat">`},
+		{`zorchenhimer <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="28px" title="zorcheWhat">`, `zorchenhimer <img src="/emotes/twitch/zorchenhimer/zorcheWhat.png" height="28px" title="zorcheWhat">`},
 	}
 
 	for _, d := range data {

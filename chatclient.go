@@ -273,13 +273,11 @@ func (cl *Client) replaceColorizedName(chatData common.ChatData) common.ChatData
 	newWords := []string{}
 
 	nameMap := make(map[string]string) // Mapping of matching names to colors
-	nameMap[strings.ToLower(cl.name)] = cl.color
 	nameMap[strings.ToLower("@"+cl.name)] = cl.color
 	if chat != nil {
 		colors := chat.GetColors() // locks
 		for name, color := range colors {
 			if strings.ToLower(name) != strings.ToLower(cl.name) {
-				nameMap[strings.ToLower(name)] = color
 				nameMap[strings.ToLower("@"+name)] = color
 			}
 		}
