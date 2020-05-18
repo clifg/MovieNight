@@ -100,9 +100,7 @@ func LoadSettings(filename string) (*Settings, error) {
 		}
 	}
 
-	if s.RateLimitChat == -1 {
-		s.RateLimitChat = 0
-	} else if s.RateLimitChat <= 0 {
+	if s.RateLimitChat < 0 {
 		s.RateLimitChat = 1
 	}
 
@@ -124,9 +122,7 @@ func LoadSettings(filename string) (*Settings, error) {
 		s.RateLimitAuth = 5
 	}
 
-	if s.RateLimitDuplicate == -1 {
-		s.RateLimitDuplicate = 0
-	} else if s.RateLimitDuplicate <= 0 {
+	if s.RateLimitDuplicate < 0 {
 		s.RateLimitDuplicate = 30
 	}
 

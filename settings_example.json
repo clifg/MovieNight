@@ -9,11 +9,11 @@
 	"ApprovedEmotes": null,
 	"LogLevel": "debug",
 	"LogFile": "thelog.log",
-	"RateLimitChat": 1,
+	"RateLimitChat": 0,
 	"RateLimitNick": 300,
 	"RateLimitColor": 60,
 	"RateLimitAuth": 5,
-	"RateLimitDuplicate": 30,
+	"RateLimitDuplicate": 0,
 	"NoCache": false,
 	"WrappedEmotesOnly": true
 }
