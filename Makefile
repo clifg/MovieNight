@@ -21,7 +21,7 @@ server: ServerMovieNight static/main.wasm
 
 # Bulid used for deploying to my server.
 ServerMovieNight: *.go common/*.go
-	GOOS=linux GOARCH=386 go$(GO_VERSION) build -o MovieNight $(TAGS)
+	CGO_ENABLED=0 GOOS=linux GOARCH=386 go$(GO_VERSION) build -o MovieNight $(TAGS)
 
 setdev:
 	$(eval export TAGS=-tags "dev")
@@ -29,13 +29,13 @@ setdev:
 dev: setdev all
 
 MovieNight$(EXT): *.go common/*.go
-	go$(GO_VERSION) build -o $@ $(TAGS)
+	CGO_ENABLED=0 go$(GO_VERSION) build -o $@ $(TAGS)
 
 static/js/wasm_exec.js:
 	cp $$(go env GOROOT)/misc/wasm/wasm_exec.js $@
 
 static/main.wasm: static/js/wasm_exec.js wasm/*.go common/*.go
-	GOOS=js GOARCH=wasm go$(GO_VERSION) build -o $@ $(TAGS) wasm/*.go
+	CGO_ENABLED=0 GOOS=js GOARCH=wasm go$(GO_VERSION) build -o $@ $(TAGS) wasm/*.go
 
 clean:
 	-rm MovieNight$(EXT) ./static/main.wasm ./static/js/wasm_exec.js
