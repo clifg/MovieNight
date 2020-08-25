@@ -23,24 +23,27 @@ type Settings struct {
 	cmdLineKey string // stream key from the command line
 
 	// Saved settings
-	StreamStats     bool
-	MaxMessageCount int
-	TitleLength     int // maximum length of the title that can be set with the /playing
-	AdminPassword   string
-	RegenAdminPass  bool // regenerate admin password on start?
-	StreamKey       string
-	ListenAddress   string
-	ApprovedEmotes  []string // list of channels that have been approved for emote use.  Global emotes are always "approved".
-	TwitchClientID  string   // client id from twitch developers portal
-	SessionKey      string   // key for session data
-	Bans            []BanInfo
-	LogLevel        common.LogLevel
-	LogFile         string
-	RoomAccess      AccessMode
-	RoomAccessPin   string // The current pin
-	NewPin          bool   // Auto generate a new pin on start.  Overwrites RoomAccessPin if set.
-
-	WrappedEmotesOnly bool // only allow "wrapped" emotes.  eg :Kappa: and [Kappa] but not Kappa
+	AdminPassword      string
+	ApprovedEmotes     []string // list of channels that have been approved for emote use.  Global emotes are always "approved".
+	Bans               []BanInfo
+	LetThemLurk        bool // whether or not to announce users joining/leaving chat
+	ListenAddress      string
+	LogFile            string
+	LogLevel           common.LogLevel
+	MaxMessageCount    int
+	NewPin             bool   // Auto generate a new pin on start.  Overwrites RoomAccessPin if set.
+	PageTitle          string // primary value for the page <title> element
+	RegenAdminPass     bool   // regenerate admin password on start?
+	RoomAccess         AccessMode
+	RoomAccessPin      string // The current pin
+	RtmpListenAddress  string // host:port that the RTMP server listens on
+	SessionKey         string // key for session data
+	StreamKey          string
+	StreamStats        bool
+	TitleLength        int    // maximum length of the title that can be set with the /playing
+	TwitchClientID     string // client id from twitch developers portal
+	TwitchClientSecret string // OAuth from twitch developers portal: https://dev.twitch.tv/docs/authentication/getting-tokens-oauth#oauth-client-credentials-flow
+	WrappedEmotesOnly  bool   // only allow "wrapped" emotes.  eg :Kappa: and [Kappa] but not Kappa
 
 	// Rate limiting stuff, in seconds
 	RateLimitChat      time.Duration
@@ -100,30 +103,36 @@ func LoadSettings(filename string) (*Settings, error) {
 		}
 	}
 
-	if s.RateLimitChat < 0 {
+	// Set to -1 to reset
+	if s.RateLimitChat == -1 {
 		s.RateLimitChat = 1
+	} else if s.RateLimitChat < 0 {
+		s.RateLimitChat = 0
 	}
 
 	if s.RateLimitNick == -1 {
-		s.RateLimitNick = 0
-	} else if s.RateLimitNick <= 0 {
 		s.RateLimitNick = 300
+	} else if s.RateLimitNick < 0 {
+		s.RateLimitNick = 0
 	}
 
 	if s.RateLimitColor == -1 {
-		s.RateLimitColor = 0
-	} else if s.RateLimitColor <= 0 {
 		s.RateLimitColor = 60
+	} else if s.RateLimitColor < 0 {
+		s.RateLimitColor = 0
 	}
 
 	if s.RateLimitAuth == -1 {
-		s.RateLimitAuth = 0
-	} else if s.RateLimitAuth <= 0 {
 		s.RateLimitAuth = 5
+	} else if s.RateLimitAuth < 0 {
+		common.LogInfoln("It's not recommended to disable the authentication rate limit.")
+		s.RateLimitAuth = 0
 	}
 
-	if s.RateLimitDuplicate < 0 {
+	if s.RateLimitDuplicate == -1 {
 		s.RateLimitDuplicate = 30
+	} else if s.RateLimitDuplicate < 0 {
+		s.RateLimitDuplicate = 0
 	}
 
 	if s.WrappedEmotesOnly {
