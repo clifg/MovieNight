@@ -60,14 +60,14 @@ var commands = &CommandControl{
 			Function: func(client *Client, args []string) (string, error) {
 				var newEmoji string
 				if len(args) == 0 {
-					newEmoji = " "
+					newEmoji = ""
 				} else if len(args) > 1 {
 					return "", fmt.Errorf("Too many arguments!")
 				} else {
 					newEmoji = args[0]
 				}
 
-				if !common.IsValidEmoji(newEmoji) {
+				if len(newEmoji) > 0 && !common.IsValidEmoji(newEmoji) {
 					return "", fmt.Errorf("Invalid emoji.")
 				}
 
