@@ -17,6 +17,7 @@ var (
 	CNHelp   ChatCommandNames = []string{"help"}
 	CNCount  ChatCommandNames = []string{"count"}
 	CNColor  ChatCommandNames = []string{"color", "colour"}
+	CNEmoji  ChatCommandNames = []string{"emoji"}
 	CNWhoAmI ChatCommandNames = []string{"w", "whoami"}
 	CNAuth   ChatCommandNames = []string{"auth"}
 	CNUsers  ChatCommandNames = []string{"users"}
@@ -48,6 +49,7 @@ var ChatCommands = []ChatCommandNames{
 	CNHelp,
 	CNCount,
 	CNColor,
+	CNEmoji,
 	CNWhoAmI,
 	CNAuth,
 	CNUsers,

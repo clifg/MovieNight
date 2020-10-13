@@ -84,6 +84,7 @@ func (c ClientData) HTML() string {
 type DataMessage struct {
 	From    string
 	Color   string
+	Emoji   string
 	Message string
 	Level   CommandLevel
 	Type    MessageType
@@ -119,17 +120,24 @@ func (dc DataMessage) HTML() string {
 		case CmdlAdmin:
 			badge = `<img src="/static/img/admin.png" class="badge" />`
 		}
+
+		// Emoji will override an admin badge. Admin badge is super ugly right now anyway
+		if dc.Emoji != " " {
+			badge = dc.Emoji
+		}
+
 		return `<span>` + badge + `<span class="name" style="color:` + dc.Color + `">` + dc.From +
 			`</span><b>:</b> <span class="msg">` + dc.Message + `</span></span>`
 	}
 }
 
-func NewChatMessage(name, color, msg string, lvl CommandLevel, msgtype MessageType) ChatData {
+func NewChatMessage(name, color, emoji string, msg string, lvl CommandLevel, msgtype MessageType) ChatData {
 	return ChatData{
 		Type: DTChat,
 		Data: DataMessage{
 			From:    name,
 			Color:   color,
+			Emoji:   emoji,
 			Message: msg,
 			Type:    msgtype,
 			Level:   lvl,

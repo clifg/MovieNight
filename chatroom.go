@@ -223,7 +223,7 @@ func (cr *ChatRoom) AddMsg(from *Client, isAction, isServer bool, msg string) {
 		t = common.MsgServer
 	}
 
-	cr.AddChatMsg(common.NewChatMessage(from.name, from.color, msg, from.CmdLevel, t))
+	cr.AddChatMsg(common.NewChatMessage(from.name, from.color, from.emoji, msg, from.CmdLevel, t))
 }
 
 // Add a chat message object to the queue
@@ -245,7 +245,7 @@ func (cr *ChatRoom) AddCmdMsg(command common.CommandType, args []string) {
 
 func (cr *ChatRoom) AddModNotice(message string) {
 	select {
-	case cr.modqueue <- common.NewChatMessage("", "", message, common.CmdlUser, common.MsgNotice):
+	case cr.modqueue <- common.NewChatMessage("", "", "", message, common.CmdlUser, common.MsgNotice):
 	default:
 		common.LogErrorln("Unable to queue notice.  Channel full.")
 	}

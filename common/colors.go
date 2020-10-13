@@ -8,6 +8,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
+	"unicode/utf8"
+
+	"github.com/rivo/uniseg"
 )
 
 func init() {
@@ -132,6 +136,20 @@ var Colors = []string{
 var (
 	regexColor = regexp.MustCompile(`^([0-9A-Fa-f]{3}){1,2}$`)
 )
+
+// TODO: There must be a library that can do this better
+func IsValidEmoji(s string) bool {
+	if uniseg.GraphemeClusterCount(s) != 1 {
+		return false
+	}
+
+	r, _ := utf8.DecodeRuneInString(s)
+	if r == utf8.RuneError {
+		return false
+	}
+
+	return !unicode.IsLetter(r) && !unicode.IsDigit(r)
+}
 
 // IsValidColor takes a string s and compares it against a list of css color names.
 // It also accepts hex codes in the form of #RGB and #RRGGBB

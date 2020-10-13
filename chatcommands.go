@@ -55,6 +55,32 @@ var commands = &CommandControl{
 			},
 		},
 
+		common.CNEmoji.String(): Command{
+			HelpText: "Change badge emoji. Send without an emoji to clear.",
+			Function: func(client *Client, args []string) (string, error) {
+				var newEmoji string
+				if len(args) == 0 {
+					newEmoji = " "
+				} else if len(args) > 1 {
+					return "", fmt.Errorf("Too many arguments!")
+				} else {
+					newEmoji = args[0]
+				}
+
+				if !common.IsValidEmoji(newEmoji) {
+					return "", fmt.Errorf("Invalid emoji.")
+				}
+
+				err := client.setEmoji(newEmoji)
+				if err != nil {
+					common.LogErrorf("[emoji] could not send emoji update to client: %v\n", err)
+				}
+
+				common.LogInfof("[emoji] %s new emoji: %s\n", client.name, string(client.emoji))
+				return "Emoji changed successfully.", nil
+			},
+		},
+
 		common.CNColor.String(): Command{
 			HelpText: "Change user color.",
 			Function: func(cl *Client, args []string) (string, error) {
@@ -537,7 +563,7 @@ var commands = &CommandControl{
 					// Pretty sure this breaks on partial downloads (eg, one good channel and one non-existent)
 					err := getEmotes(args)
 					if err != nil {
-						cl.SendChatData(common.NewChatMessage("", "",
+						cl.SendChatData(common.NewChatMessage("", "", "",
 							err.Error(),
 							common.CmdlUser, common.MsgCommandResponse))
 						return
@@ -549,7 +575,7 @@ var commands = &CommandControl{
 					// reload emotes now that new ones were added
 					err = loadEmotes()
 					if err != nil {
-						cl.SendChatData(common.NewChatMessage("", "",
+						cl.SendChatData(common.NewChatMessage("", "", "",
 							err.Error(),
 							common.CmdlUser, common.MsgCommandResponse))
 						return
@@ -641,7 +667,7 @@ func commandReloadEmotes(cl *Client) {
 		common.LogErrorf("Unbale to reload emotes: %s\n", err)
 		//return "", err
 
-		cl.SendChatData(common.NewChatMessage("", "",
+		cl.SendChatData(common.NewChatMessage("", "", "",
 			err.Error(),
 			common.CmdlUser, common.MsgCommandResponse))
 		return

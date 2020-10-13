@@ -35,8 +35,10 @@ func processMessageKey(this js.Value, v []js.Value) interface{} {
 	startIdx := v[0].Get("target").Get("selectionStart").Int()
 	keyCode := v[0].Get("keyCode").Int()
 	ctrl := v[0].Get("ctrlKey").Bool()
+	command := v[0].Get("metaKey").Bool()
 
-	if ctrl && keyCode == keySpace {
+	// We need to check the command key so we don't block the emoji picker on MacOS
+	if ctrl && keyCode == keySpace && !command {
 		processMessage(nil)
 		return true
 	}
