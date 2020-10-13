@@ -46,7 +46,7 @@ func TestClient_emoteHighlight(t *testing.T) {
 	}
 
 	for _, d := range data {
-		chatData := client.replaceColorizedName(common.NewChatMessage(client.name, client.color, d[0], common.CmdlUser, common.MsgChat))
+		chatData := client.replaceColorizedName(common.NewChatMessage(client.name, client.color, "", d[0], common.CmdlUser, common.MsgChat))
 		if chatData.Data.(common.DataMessage).Message != d[1] {
 			t.Errorf("\nExpected:\n\t%s\nReceived\n\t%s", d[1], chatData.Data.(common.DataMessage).Message)
 		} else {
@@ -83,7 +83,7 @@ func TestClient_emoteHighlight(t *testing.T) {
 	}
 
 	for _, d := range data {
-		chatData := client2.replaceColorizedName(common.NewChatMessage(client.name, client.color, d[0], common.CmdlUser, common.MsgChat))
+		chatData := client2.replaceColorizedName(common.NewChatMessage(client.name, client.color, "", d[0], common.CmdlUser, common.MsgChat))
 		if chatData.Data.(common.DataMessage).Message != d[1] {
 			t.Errorf("\nExpected:\n\t%s\nReceived\n\t%s", d[1], chatData.Data.(common.DataMessage).Message)
 		} else {

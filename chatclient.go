@@ -22,6 +22,7 @@ type Client struct {
 	conn          *chatConnection
 	belongsTo     *ChatRoom
 	color         string
+	emoji         string
 	CmdLevel      common.CommandLevel
 	IsColorForced bool
 	IsNameForced  bool
@@ -43,6 +44,7 @@ func NewClient(connection *chatConnection, room *ChatRoom, name, color string) (
 		conn:      connection,
 		belongsTo: room,
 		color:     color,
+		emoji:     "",
 	}
 
 	if err := c.setName(name); err != nil {
@@ -112,7 +114,7 @@ func (cl *Client) NewMsg(data common.ClientData) {
 					msgType = common.MsgCommandError
 				}
 
-				err := cl.SendChatData(common.NewChatMessage("", "",
+				err := cl.SendChatData(common.NewChatMessage("", "", "",
 					common.ParseEmotes(respText),
 					common.CmdlUser,
 					msgType))
@@ -125,7 +127,7 @@ func (cl *Client) NewMsg(data common.ClientData) {
 		} else {
 			// Limit the rate of sent chat messages.  Ignore mods and admins
 			if time.Now().Before(cl.nextChat) && cl.CmdLevel == common.CmdlUser {
-				err := cl.SendChatData(common.NewChatMessage("", "",
+				err := cl.SendChatData(common.NewChatMessage("", "", "",
 					"Slow down.",
 					common.CmdlUser,
 					common.MsgCommandResponse))
@@ -145,7 +147,7 @@ func (cl *Client) NewMsg(data common.ClientData) {
 			if strings.TrimSpace(strings.ToLower(msg)) == cl.lastMsg &&
 				time.Now().Before(cl.nextDuplicate) &&
 				cl.CmdLevel == common.CmdlUser {
-				err := cl.SendChatData(common.NewChatMessage("", "",
+				err := cl.SendChatData(common.NewChatMessage("", "", "",
 					common.ParseEmotes("You already sent that PeepoSus"),
 					common.CmdlUser,
 					common.MsgCommandResponse))
@@ -203,7 +205,7 @@ func (cl *Client) Send(data common.ChatDataJSON) error {
 }
 
 func (cl *Client) SendServerMessage(s string) error {
-	err := cl.SendChatData(common.NewChatMessage("", ColorServerMessage, s, common.CmdlUser, common.MsgServer))
+	err := cl.SendChatData(common.NewChatMessage("", ColorServerMessage, "", s, common.CmdlUser, common.MsgServer))
 	if err != nil {
 		return fmt.Errorf("could send server message to %s: message - %#v: %v", cl.name, s, err)
 	}
@@ -260,6 +262,11 @@ func (cl *Client) setName(s string) error {
 		cl.conn.clientName = s
 	}
 	return nil
+}
+
+func (cl *Client) setEmoji(s string) error {
+	cl.emoji = s
+	return cl.SendChatData(common.NewChatHiddenMessage(common.CdEmoji, cl.emoji))
 }
 
 func (cl *Client) setColor(s string) error {
