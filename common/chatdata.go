@@ -122,7 +122,7 @@ func (dc DataMessage) HTML() string {
 		}
 
 		// Emoji will override an admin badge. Admin badge is super ugly right now anyway
-		if dc.Emoji != " " {
+		if dc.Emoji != "" {
 			badge = dc.Emoji
 		}
 
